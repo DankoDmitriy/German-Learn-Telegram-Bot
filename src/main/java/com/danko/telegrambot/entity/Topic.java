@@ -1,5 +1,6 @@
 package com.danko.telegrambot.entity;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Table(name = "topics")
 @NoArgsConstructor
 @SuperBuilder
+@Data
 public class Topic extends BaseEntity {
 
     @Column(name = "number")

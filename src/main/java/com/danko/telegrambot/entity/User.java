@@ -1,5 +1,6 @@
 package com.danko.telegrambot.entity;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -15,11 +16,12 @@ import javax.persistence.Table;
 @Table(name = "users")
 @NoArgsConstructor
 @SuperBuilder
+@Data
 public class User extends BaseEntity {
     @Column(name = "tgid")
     private Long tgId;
 
-    @Column(name = "isAdmin")
+    @Column(name = "is_admin")
     protected Boolean isAdmin;
 
     @Column(name = "user_name")

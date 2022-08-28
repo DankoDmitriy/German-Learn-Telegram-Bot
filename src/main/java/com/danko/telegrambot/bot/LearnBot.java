@@ -1,10 +1,14 @@
 package com.danko.telegrambot.bot;
 
 import com.danko.telegrambot.entity.Command;
-import lombok.SneakyThrows;
+import com.danko.telegrambot.handler.update.UpdateHandler;
+import com.danko.telegrambot.service.LocalStorageTGService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -17,6 +21,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +37,17 @@ public class LearnBot extends TelegramLongPollingBot {
     @Value("${telegram.bot.token}")
     private String token;
 
+    @Autowired
+    private List<UpdateHandler> updateHandlers;
+    @Autowired
+    private LocalStorageTGService localStorageTGService;
+
     @PostConstruct
     public void init() {
+        updateHandlers =
+                updateHandlers.stream()
+                        .sorted(Comparator.comparingInt(u -> u.getStage().getOrder()))
+                        .collect(Collectors.toList());
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(this);
@@ -56,10 +70,20 @@ public class LearnBot extends TelegramLongPollingBot {
         }
     }
 
-    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        logger.log(Level.INFO, "I had had a message");
+        if (update.hasMessage()) {
+            localStorageTGService.checkUserAndSetupUserAction(update.getMessage().getChatId());
+        }
+        for (UpdateHandler updateHandler : updateHandlers) {
+            try {
+                if (updateHandler.handleUpdate(update)) {
+                    return;
+                }
+            } catch (Exception e) {
+                logger.log(Level.ERROR, e.getMessage());
+            }
+        }
     }
 
     @Override
