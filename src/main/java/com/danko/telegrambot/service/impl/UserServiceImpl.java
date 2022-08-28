@@ -6,6 +6,7 @@ import com.danko.telegrambot.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        user.setUpdate(LocalDateTime.now());
         return userRepository.save(user);
     }
 
