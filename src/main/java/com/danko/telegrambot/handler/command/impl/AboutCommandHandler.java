@@ -29,7 +29,6 @@ public class AboutCommandHandler implements CommandHandler {
                                         + " знаний в немецком языке.\n\n"
                                         + "Этот бот был написан в целях изучения языка программирования Java.\n\n"
                                         + "Бот написан по уроку от MJC School.\n\n"
-                                        + "Youtube: https://www.youtube.com/channel/UCUFaGUhKgAECPuMZJxXwdbg\n"
                         )
                         .build());
     }

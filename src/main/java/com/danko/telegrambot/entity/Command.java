@@ -10,11 +10,11 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum Command {
-    ABOUT("about", "О боте"),
-    MY_ACCOUNT("my_account", "Информация о Вашей записи"),
-    LEVEL_LIST("level_list", "Показать доступные уровни"),
-    TOPIC_LIST("topic_list", "Показать доступные темы"),
-    START("start", "Начать обучение");
+    START("start", "Начать обучение."),
+    MY_ACCOUNT("my_account", "Мой профиль."),
+    LEVEL_LIST("level_list", "Показать доступные уровни."),
+    TOPIC_LIST("topic_list", "Показать доступные темы."),
+    ABOUT("about", "О боте");
 
     private final String name;
     private final String desc;
